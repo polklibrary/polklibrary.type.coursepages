@@ -1,0 +1,220 @@
+ <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Polk Library Resources</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="${view/portal/absolute_url}/++plone++production/default.css" />
+<link rel="stylesheet" type="text/css" href="${view/portal/absolute_url}/++plone++static/plone-legacy-compiled.css" />
+<link rel="stylesheet" type="text/css" href="https://library.uwosh.edu/++theme++uwosh/css/uwosh.css" />
+<link rel="stylesheet" type="text/css" href="https://library.uwosh.edu/++theme++uwosh/css/mobile.css" />
+<link rel="stylesheet" type="text/css" href="https://library.uwosh.edu/++theme++uwosh/css/polk.css" />
+<link rel="stylesheet" type="text/css" href="https://library.uwosh.edu/++theme++uwosh/css/tinymce.css" />
+<link rel="stylesheet" type="text/css" href="${view/portal/absolute_url}/++resource++polklibrary.type.coursepages/canvas.css" />
+
+<script type="text/javascript" src="https://library.uwosh.edu/++plone++static/components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="https://library.uwosh.edu/++theme++uwosh/js/mobile.js"></script>
+<script type="text/javascript" src="${view/portal/absolute_url}/++resource++polklibrary.type.coursepages/canvas.js"></script>
+<script type="text/javascript">
+    var SubjectDisciplines = ${view/get_disciplines};
+
+    // Library Simple Analytics
+    window._SA_PAGE_URL_FN = function(u,a,d){
+        u = u + '/' + ${view/canvas_course_id};
+        return u;
+    }
+</script>
+<script type="text/javascript" src="https://polk.uwosh.edu/analytics/sa.js"></script>
+
+</head>
+<body>
+
+    <h1 class="section-heading">Library Resources</h1>
+    <div id="content-core" class="column">
+    
+        <tal:block condition="view/message">
+            <div class="col-90">
+                <div class="column-inner canvas-message">
+                    ${view/message}
+                </div>
+            </div>
+        </tal:block>
+        
+        <tal:block condition="view/requires_setup">
+            <div class="col-90">
+                <div class="column-inner canvas-instructor-area">
+                
+                    <div class="col-50">
+                        <div class="canvas-instructor-note">Note: This red area is not visible to students</div>
+                        
+                        <div>
+                            If you would like a librarian to enhance the resources on your course, please
+                            click the request button below. If not, UW Oshkosh Libraries will attempt to provide
+                            the best resources based off of the course title.
+                        </div>
+                        
+                        <br />
+                        
+                        <form method="post" action="${context/absolute_url}/getLibraryCanvasResources">
+                            <label for="canvas-form-note">
+                                Any notes or comments to the librarian?
+                            </label>
+                            <textarea id="canvas-form-note" name="form.note"></textarea>
+                            <br />
+                            <label for="canvas-form-online">
+                                Is this an online course?
+                            </label>
+                            <select id="canvas-form-online" name="form.online">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                            <br />
+                            <br />
+                            <input type="hidden" name="custom_canvas_course_id" value="${view/canvas_course_id}" />
+                            <input type="hidden" name="context_title" value="${view/canvas_course_title}" />
+                            <input type="hidden" name="context_label" value="${view/canvas_course_subject}" />
+                            <input type="hidden" name="roles" value="${view/canvas_role}" />
+                            <input type="hidden" name="lis_person_name_given" value="${view/canvas_firstname}" />
+                            <input type="hidden" name="lis_person_name_family" value="${view/canvas_lastname}" />
+                            <input type="hidden" name="lis_person_contact_email_primary" value="${view/canvas_person_email}" />
+                            <input type="hidden" name="custom_canvas_api_domain" value="${view/custom_canvas_domain}" />
+                            <input type="submit" name="form.submit" value="Request Enhanced Library Resources" />
+                        </form>
+                    </div>
+                    <div class="col-5"><br /></div>
+                    <div class="col-40">
+                        <div>
+                            <strong>What do I get from enhanced library resources?</strong>
+                        </div>
+                        <div>
+                            A librarian will be assigned to your course.  This librarian will provide library resources specific to your course and will also be available to assist your students with their research needs.
+                        </div>
+                        <br />
+                        <div>
+                            <strong>What are general subject resources?</strong>
+                        </div>
+                        <div>
+                            General subject resources will provide a general "catch all" of resources based off of the course title.  
+                            These resources will be included regardless of requesting enhanced library resources. The algorithm which determines 
+                            the general resources will continue evolve especially during the initial rollout of Canvas.
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </tal:block>
+        
+        <div class="col-75 column-padder">
+            <tal:block condition="view/course_page">
+                <h2 class="section-heading">Course Specific Resources</h2>
+                <div class="content-area content-course" tal:content="structure view/course_page/body/output|nothing"></div>
+                <div class="clear hspacer"></div>
+            </tal:block>
+            
+            <tal:block condition="view/show_search">
+            <h2 class="section-heading">Search@UW</h2>
+            <div class="content-area content-search">
+                <form id="primo-ve-search" class="column"  method="get" target="_top" action="https://wisconsin-uwosh.primo.exlibrisgroup.com/discovery/search" onsubmit="searchPrimo()" enctype="application/x-www-form-urlencoded; charset=utf-8">
+                    <div class="col-50">
+                        <label for="primo-ve-query" class="hide">Search@UW:</label>
+                        <input id="primo-ve-query" type="text" placeholder="Find articles, books, dvds and more with Search@UW" value="" /> 
+                    </div>
+                    <div class="col-25">
+                        <label for="search-scopes" class="hide">Search Scope:</label>
+                        <select id="search-scopes" name="search_scope">
+                            <option value="DN_and_CI">Everything</option>
+                            <option value="CentralIndex">- Articles</option>
+                            <option value="MyInstitution">- Books &amp; Media (UW Oshkosh Libraries)</option>
+                            <option value="DiscoveryNetwork">- Books &amp; Media (UW System)</option>
+                            <option value="UW_DIGCOLL">- UW Digital Collections</option>
+                            <option value="OSH_Archive">- Historical Society Archives &amp; Oshkosh Archives</option>
+                            <option value="CourseReserves">Course Reserves (UW Oshkosh Libraries)</option>
+                        </select>
+                    </div>
+                    <div class="col-10">
+                        <input type="hidden" name="vid" value="01UWI_OSH:OSH" />
+                        <input type="hidden" name="mode" value="basic" />
+                        <input type="hidden" id="primo-ve-query-translated" name="query" />
+                        <input type="submit" value="SEARCH" />                                       
+                        <script type="text/javascript">
+                            function searchPrimo() {
+                                document.getElementById("primo-ve-query-translated").value = "any,contains," + document.getElementById("primo-ve-query").value.replace(/[,]/g, " ");
+                                document.getElementById("primo-ve-search").submit();
+                            }
+                        </script>
+                    </div>
+                    
+                    <div class="clear hspacer"></div>
+                </form> 
+            </div>
+            </tal:block>
+        
+            <tal:block condition="view/show_subject">
+                <h2 class="section-heading">General Subject Resources</h2>
+                <div class="content-area content-subject" tal:content="structure view/subject/body/output|nothing"></div>
+                <div class="clear hspacer"></div>
+            </tal:block>
+            
+            
+       
+            <tal:block define="citations view/get_citations" condition="citations">
+            <h2 class="section-heading">Course Citation Resources</h2>
+            <div tal:content="structure citations|nothing">
+            </div>
+            </tal:block>
+
+            <div class="clear"></div>
+        </div>
+
+        
+        <div class="col-20" >
+        
+            <!-- Librarian Found -->
+            <div class="column-inner-10 canvas-librarian" tal:condition="view/librarian">
+                <h2>${view/librarian/Title}</h2>
+                <img class="librarian-portrait" tal:condition="view/librarian/image" src="${view/librarian/absolute_url}/@@download/image/${view/librarian/image/filename};" alt="Staff Photo" />
+                <img class="librarian-portrait" tal:condition="not: view/librarian/image" src="${view/portal/absolute_url}/++resource++polklibrary.type.staff/staff-default.jpg" alt="Missing Photo" />
+                <div><strong>Email:</strong> <a href="mailto:${view/librarian/email}">${view/librarian/email}</a></div>
+                <div><strong>Phone:</strong> <a class="pat-telephone" href="tel:${view/librarian/phone}">${view/librarian/phone}</a></div>
+                <div><strong>Office:</strong> <span>${view/librarian/location}</span></div>
+                
+                <div class="librarian-chat" tal:content="structure view/course_librarian/libchat|nothing"></div>
+
+            </div>
+            
+            <!-- No Librarian Found -->
+            <div class="column-inner-10 canvas-librarian" tal:condition="not: view/librarian">
+                <h2>Reference Librarians</h2>
+                <img class="librarian-portrait" src="${view/portal/absolute_url}/++resource++polklibrary.type.staff/staff-default.jpg" alt="Missing Photo" />
+                <div><strong>Email:</strong> <a href="mailto:infodesk@uwosh.libanswers.com">infodesk@uwosh.libanswers.com</a></div>
+                <div><strong>Phone:</strong> <a class="pat-telephone" href="tel:9208211542">9208211542</a></div>
+                
+                <div class="librarian-chat">
+                    <div id="libchat_77858bdadb8dcffac28f62b0fd5030e9"></div>
+                    <script src="https://uwosh.libanswers.com/load_chat.php?hash=77858bdadb8dcffac28f62b0fd5030e9"></script>
+                </div>
+                
+            </div>
+            
+            <div class="canvas-link">
+                <a href="https://library.uwosh.edu">UW Oshkosh Libraries</a>
+                <a href="https://library.uwosh.edu/accounts">Library Accounts</a>
+                <a href="https://library.uwosh.edu/services/forms/research-assistance">Research Assistance</a>
+                <a href="https://library.uwosh.edu/services/citing-sources">Citing Sources</a>
+                <a href="https://uwosh.libanswers.com/search/">FAQs</a>
+                <a href="https://uwosh.libanswers.com/faq/374501">Evaluating Sources</a>
+            </div>
+            
+            <div class="clear"></div>
+        </div>
+        
+        
+        
+        <div class="clear"></div>
+    </div>
+
+
+</body>
+</html>
