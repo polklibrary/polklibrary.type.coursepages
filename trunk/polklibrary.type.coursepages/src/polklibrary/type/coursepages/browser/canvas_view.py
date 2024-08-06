@@ -207,7 +207,7 @@ class CanvasView(BrowserView):
             'is_canvas_editor': self.is_canvas_editor,
         }
         
-        r = requests.get('https://polk.uwosh.edu/libhero/page/1/preview', params=data)
+        r = requests.get('https://polk.uwosh.edu/libhero/canvas/' + canvas_course_id, params=data)
         return r.content
 
 
