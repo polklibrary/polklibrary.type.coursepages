@@ -147,12 +147,6 @@ class CanvasView(BrowserView):
             self.canvas_lastname = canvas_lastname
             self.is_canvas_editor = canvas_role.lower() not in self.NON_EDITOR_ROLES
             
-            if canvas_course_id == 167690 or canvas_course_id == '167690':
-                #return 'abcd'
-                return self.retreive_guide_system()
-                #return self.request.response.redirect('https://polk.uwosh.edu/libhero/page/1/preview', status=301)
-            
-            
             # Handle Workflows
             if self.is_canvas_editor and 'form.submit' in self.request.form:
                 self.workflow()
@@ -167,9 +161,16 @@ class CanvasView(BrowserView):
             self.show_subject = False
             self.show_search = False
             
+            # hook. check here first for course page, if not, move to new system
+            if not course_page_brain:
+                return self.retreive_guide_system()
+                # ENDS CODE
+                # HANDLES SUBJECTS NOW
+            
             
             if subject_brain:
-                self.subject = None #subject_brain.getObject()
+                # turned off for new guide system
+                self.subject = None #subject_brain.getObject() 
             
             if course_page_brain:
                 self.course_page = course_page_brain.getObject()
