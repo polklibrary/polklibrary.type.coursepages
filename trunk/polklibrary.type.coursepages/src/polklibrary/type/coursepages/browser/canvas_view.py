@@ -3,7 +3,7 @@ from plone.i18n.normalizer import idnormalizer
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from polklibrary.type.coursepages.utility import MailMe
-import json, logging
+import json, logging, requests
 logger = logging.getLogger("Plone")
 
 # def setup_logger(name, log_file, level=logging.INFO):
@@ -119,7 +119,7 @@ class CanvasView(BrowserView):
     NON_EDITOR_ROLES = ['student', 'interpreter pre-semester', 'observers', 'interpreter semester', 'learner', 'students',]
     
     """
-    http://localhost:8080/library/getLibraryCanvasResources?custom_canvas_api_domain=uwosh.instructure.com&custom_canvas_course_id=12345&context_label=nurs 101&context_title=skeleton 101
+    http://localhost:8081/library/getLibraryCanvasResources?custom_canvas_api_domain=uwosh.instructure.com&custom_canvas_course_id=167690&context_label=nurs 101&context_title=skeleton 105
     """
     
     def __call__(self):
@@ -148,7 +148,9 @@ class CanvasView(BrowserView):
             self.is_canvas_editor = canvas_role.lower() not in self.NON_EDITOR_ROLES
             
             if canvas_course_id == 167690 or canvas_course_id == '167690':
-                return self.request.response.redirect('https://polk.uwosh.edu/libhero/page/1/preview', status=301)
+                #return 'abcd'
+                return self.retreive_guide_system()
+                #return self.request.response.redirect('https://polk.uwosh.edu/libhero/page/1/preview', status=301)
             
             
             # Handle Workflows
@@ -189,6 +191,25 @@ class CanvasView(BrowserView):
             return self.template()
     
         return '<div>You are not using the official UWO Canvas URL. <br /><br /> UWO Library is only available on the official UWO Canvas: <b><a href="https://uwosh.instructure.com">https://uwosh.instructure.com</a></b>.  <br /><br />Not using the official UWO Canvas URL will cause issues in other addons such as Zoom, Office365, etc...  Please update your bookmark or link.<br /><br />If you have any questions or concerns, please contact <b>librarytechnology@uwosh.edu</b></div>'
+
+    
+    def retreive_guide_system(self):
+        data = {
+            'custom_canvas_domain': self.custom_canvas_domain,
+            'canvas_course_id': self.canvas_course_id, 
+            'canvas_course_title': self.canvas_course_title,
+            'canvas_course_subject': self.canvas_course_subject,
+            'canvas_email': self.canvas_person_email,
+            'canvas_person_name': self.canvas_person_name,
+            'canvas_role': self.canvas_role,
+            'canvas_firstname': self.canvas_firstname,
+            'canvas_lastname': self.canvas_lastname,
+            'is_canvas_editor': self.is_canvas_editor,
+        }
+        
+        r = requests.get('https://polk.uwosh.edu/libhero/page/1/preview', params=data)
+        return r.content
+
 
     # custom logger causes plone not start...
     def customlog(self, message):
