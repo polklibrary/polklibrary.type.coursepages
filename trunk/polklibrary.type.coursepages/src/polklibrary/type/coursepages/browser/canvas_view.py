@@ -147,6 +147,10 @@ class CanvasView(BrowserView):
             self.canvas_lastname = canvas_lastname
             self.is_canvas_editor = canvas_role.lower() not in self.NON_EDITOR_ROLES
             
+            if canvas_course_id == 167690 or canvas_course_id == '167690':
+                return self.request.response.redirect('https://polk.uwosh.edu/libhero/page/1/preview', status=301)
+            
+            
             # Handle Workflows
             if self.is_canvas_editor and 'form.submit' in self.request.form:
                 self.workflow()
