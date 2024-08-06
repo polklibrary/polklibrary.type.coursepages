@@ -169,7 +169,7 @@ class CanvasView(BrowserView):
             
             
             if subject_brain:
-                self.subject = subject_brain.getObject()
+                self.subject = None #subject_brain.getObject()
             
             if course_page_brain:
                 self.course_page = course_page_brain.getObject()
