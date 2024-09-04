@@ -129,6 +129,7 @@ class CanvasView(BrowserView):
         canvas_course_title = self.request.form.get('context_title', '')
         canvas_course_subject = self.request.form.get('context_label', '')
         canvas_role = self.request.form.get('roles', '').lower()
+        canvas_ext_role = self.request.form.get('ext_roles', '').lower()
         canvas_firstname = self.request.form.get('lis_person_name_given', '')
         canvas_lastname = self.request.form.get('lis_person_name_family', '')
         canvas_email = self.request.form.get('lis_person_contact_email_primary', '')
@@ -143,6 +144,7 @@ class CanvasView(BrowserView):
             self.canvas_person_email = canvas_email
             self.canvas_person_name = canvas_firstname + " " + canvas_lastname
             self.canvas_role = canvas_role
+            self.canvas_ext_role = canvas_ext_role
             self.canvas_firstname = canvas_firstname
             self.canvas_lastname = canvas_lastname
             self.is_canvas_editor = canvas_role.lower() not in self.NON_EDITOR_ROLES
@@ -203,6 +205,7 @@ class CanvasView(BrowserView):
             'canvas_email': self.canvas_person_email,
             'canvas_person_name': self.canvas_person_name,
             'canvas_role': self.canvas_role,
+            'canvas_ext_role': self.canvas_ext_role,
             'canvas_firstname': self.canvas_firstname,
             'canvas_lastname': self.canvas_lastname,
             'is_canvas_editor': self.is_canvas_editor,
