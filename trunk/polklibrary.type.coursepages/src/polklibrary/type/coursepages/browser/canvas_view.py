@@ -210,7 +210,7 @@ class CanvasView(BrowserView):
             'canvas_lastname': self.canvas_lastname,
             'is_canvas_editor': self.is_canvas_editor,
         }
-        r = requests.get('https://polk.uwosh.edu/guides/canvas/' + self.canvas_course_id, params=data)
+        r = requests.get('https://polk.uwosh.edu/guides/canvas/' + self.canvas_course_id, params=data, verify=False)
         self.request.response.setHeader('Access-Control-Allow-Origin', '*')
         return r.content
 
